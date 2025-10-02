@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <!-- Сайт розроблено студентом [Ваше ім'я], група [Ваша група] -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кав'ярня "Смачна кава"</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #8B4513;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .author-info {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: right;
+        }
+
+        nav {
+            background: #8B4513;
+            padding: 0;
+            margin-top: 80px;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom: 3px solid #FFD700;
+        }
+
+        main {
+            padding: 2rem 0;
+        }
+
+        .section {
+            display: none;
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            color: #8B4513;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .welcome-text {
+            text-align: center;
+            font-size: 1.2rem;
+            margin: 2rem 0;
+            line-height: 1.8;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .menu-category {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 5px solid #8B4513;
+        }
+
+        .menu-category h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+
+        .item-price {
+            font-weight: bold;
+            color: #8B4513;
+            font-size: 1.1rem;
+            margin-right: 1rem;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background: #8B4513;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: #A0522D;
+            transform: scale(1.1);
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 5px;
+            font-size: 1rem;
+        }
+
+        .order-summary {
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .total-price {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .order-btn {
+            background: #FFD700;
+            color: #8B4513;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .order-btn:hover {
+            background: #FFA500;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contact-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            border-top: 4px solid #8B4513;
+        }
+
+        .contact-card h3 {
+            color: #8B4513;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #8B4513;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-info {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-container {
+                flex-wrap: wrap;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .quantity-control {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        .about-content {
+            text-align: center;
+            line-height: 1.8;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">☕ Смачна кава</div>
+                <div class="author-info">
+                    <div><strong>[Ваше ім'я та прізвище]</strong></div>
+                    <div>Група: [Ваша група]</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <button class="nav-btn active" onclick="showSection('home')">Головна</button>
+                <button class="nav-btn" onclick="showSection('menu')">Меню</button>
+                <button class="nav-btn" onclick="showSection('order')">Замовлення</button>
+                <button class="nav-btn" onclick="showSection('about')">Про нас</button>
+                <button class="nav-btn" onclick="showSection('contact')">Контакти</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <!-- Головна сторінка -->
+            <section id="home" class="section active">
+                <h1>Ласкаво просимо до кав'ярні "Смачна кава"!</h1>
+                <div class="welcome-text">
+                    <p>🌟 Найкраща кава у місті чекає на вас! 🌟</p>
+                    <p>У нашій затишній кав'ярні ви знайдете найсвіжішу каву, смачні десерти та дружню атмосферу. 
+                       Ми використовуємо лише найякісніші зерна та готуємо кожну чашку з любов'ю.</p>
+                    <p>Приходьте насолоджуватись неповторним смаком і теплотою нашого закладу!</p>
+                </div>
+                <div class="about-features">
+                    <div class="feature">
+                        <div class="feature-icon">☕</div>
+                        <h3>Свіжа кава</h3>
+                        <p>Щоденне обсмажування зерен</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🥐</div>
+                        <h3>Свіжі десерти</h3>
+                        <p>Домашня випічка щодня</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">🏠</div>
+                        <h3>Затишна атмосфера</h3>
+                        <p>Комфортний простір для відпочинку</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Сторінка меню -->
+            <section id="menu" class="section">
+                <h1>Наше меню</h1>
+                <div class="menu-grid" id="menuGrid">
+                    <!-- Меню генерується JavaScript -->
+                </div>
+            </section>
+
+            <!-- Сторінка замовлення -->
+            <section id="order" class="section">
+                <h1>Оформлення замовлення</h1>
+                <div class="menu-grid" id="orderGrid">
+                    <!-- Меню з можливістю замовлення генерується JavaScript -->
+                </div>
+                <div class="order-summary">
+                    <h2>Ваше замовлення</h2>
+                    <div id="orderList">Ваш кошик порожній</div>
+                    <div class="total-price">Загальна сума: <span id="totalPrice">0</span> грн</div>
+                    <button class="order-btn" onclick="placeOrder()">Оформити замовлення</button>
+                </div>
+            </section>
+
+            <!-- Про нас -->
+            <section id="about" class="section">
+                <h1>Про нашу кав'ярню</h1>
+                <div class="about-content">
+                    <p><strong>Кав'ярня "Смачна кава"</strong> - це місце, де народжується справжня кавова магія!</p>
+                    <br>
+                    <p>Наша історія почалася у 2020 році з простої мрії - створити простір, 
+                       де кожен відвідувач відчує себе як вдома. Ми віримо, що кава - це не просто напій, 
+                       а мистецтво, яке об'єднує людей.</p>
+                    <br>
+                    <p><strong>Наші принципи:</strong></p>
+                    <p>🔸 Використання лише якісних зерен від перевірених постачальників</p>
+                    <p>🔸 Професійна команда барист з великим досвідом</p>
+                    <p>🔸 Затишна атмосфера для роботи та відпочинку</p>
+                    <p>🔸 Індивідуальний підхід до кожного клієнта</p>
+                    <p>🔸 Постійне вдосконалення рецептур та сервісу</p>
+                </div>
+            </section>
+
+            <!-- Контакти -->
+            <section id="contact" class="section">
+                <h1>Контакти</h1>
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>📍 Адреса</h3>
+                        <p>вул. Центральна, 15<br>м. Київ, 01001</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>📞 Телефон</h3>
+                        <p>+38 (044) 123-45-67<br>+38 (050) 987-65-43</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>🕒 Режим роботи</h3>
+                        <p>Пн-Пт: 07:00 - 22:00<br>Сб-Нд: 08:00 - 23:00</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>📧 Email</h3>
+                        <p>info@smachnakava.com<br>order@smachnakava.com</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-info">
+                <p><strong>Кав'ярня "Смачна кава"</strong> © 2024</p>
+                <p>Розроблено студентом: <strong>[Ваше ім'я та прізвище]</strong>, група <strong>[Ваша група]</strong></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Дані меню у вигляді JavaScript об'єктів
+        const menuData = {
+            drinks: {
+                title: "☕ Напої",
+                items: [
+                    { id: 1, name: "Еспресо", description: "Класичний італійський еспресо", price: 35 },
+                    { id: 2, name: "Американо", description: "М'який кавовий напій", price: 40 },
+                    { id: 3, name: "Капучіно", description: "Кава з молочною піною", price: 50 },
+                    { id: 4, name: "Лате", description: "Ніжна кава з молоком", price: 55 },
+                    { id: 5, name: "Мокачіно", description: "Кава з шоколадом", price: 60 },
+                    { id: 6, name: "Чай чорний", description: "Ароматний чорний чай", price: 25 },
+                    { id: 7, name: "Чай зелений", description: "Корисний зелений чай", price: 30 },
+                    { id: 8, name: "Гарячий шоколад", description: "Густий шоколадний напій", price: 45 }
+                ]
+            },
+            food: {
+                title: "🥐 Їжа та десерти",
+                items: [
+                    { id: 9, name: "Круасан", description: "Свіжий французький круасан", price: 35 },
+                    { id: 10, name: "Чізкейк", description: "Ніжний сирний торт", price: 65 },
+                    { id: 11, name: "Тірамісу", description: "Італійський десерт", price: 70 },
+                    { id: 12, name: "Маффін", description: "Домашній маффін", price: 40 },
+                    { id: 13, name: "Сендвіч", description: "Сендвіч з куркою", price: 85 },
+                    { id: 14, name: "Салат", description: "Свіжий овочевий салат", price: 75 },
+                    { id: 15, name: "Панініс", description: "Італійський панініс", price: 90 },
+                    { id: 16, name: "Печиво", description: "Домашнє печиво", price: 20 }
+                ]
+            }
+        };
+
+        let cart = {}; // Кошик замовлень
+
+        // Функція переключення секцій
+        function showSection(sectionId) {
+            // Прибираємо активний клас з усіх секцій та кнопок
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Додаємо активний клас до обраної секції та кнопки
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Генерування меню для сторінки "Меню"
+        function generateMenu() {
+            const menuGrid = document.getElementById('menuGrid');
+            let menuHTML = '';
+
+            for (let category in menuData) {
+                menuHTML += `
+                    <div class="menu-category">
+                        <h3>${menuData[category].title}</h3>
+                        ${menuData[category].items.map(item => `
+                            <div class="menu-item">
+                                <div class="item-info">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-description">${item.description}</div>
+                                </div>
+                                <div class="item-price">${item.price} грн</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            menuGrid.innerHTML = menuHTML;
+        }
+
+        // Генерування меню для сторінки "Замовлення"
+        function generateOrderMenu() {
+            const orderGrid = document.getElementById('orderGrid');
+            let menuHTML = '';
+
+            for (let category in menuData) {
+                menuHTML += `
+                    <div class="menu-category">
+                        <h3>${menuData[category].title}</h3>
+                        ${menuData[category].items.map(item => `
+                            <div class="menu-item">
+                                <div class="item-info">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-description">${item.description}</div>
+                                </div>
+                                <div class="item-price">${item.price} грн</div>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" onclick="changeQuantity(${item.id}, -1)">−</button>
+                                    <input type="number" id="qty-${item.id}" value="0" min="0" max="99" 
+                                           class="quantity-input" onchange="updateQuantity(${item.id})">
+                                    <button class="quantity-btn" onclick="changeQuantity(${item.id}, 1)">+</button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            orderGrid.innerHTML = menuHTML;
+        }
+
+        // Зміна кількості товару
+        function changeQuantity(itemId, change) {
+            const input = document.getElementById(`qty-${itemId}`);
+            let currentValue = parseInt(input.value) || 0;
+            let newValue = Math.max(0, Math.min(99, currentValue + change));
+            input.value = newValue;
+            updateQuantity(itemId);
+        }
+
+        // Оновлення кількості товару
+        function updateQuantity(itemId) {
+            const quantity = parseInt(document.getElementById(`qty-${itemId}`).value) || 0;
+            
+            if (quantity > 0) {
+                // Знаходимо товар у меню
+                let item = null;
+                for (let category in menuData) {
+                    item = menuData[category].items.find(i => i.id === itemId);
+                    if (item) break;
+                }
+                
+                cart[itemId] = {
+                    ...item,
+                    quantity: quantity
+                };
+            } else {
+                delete cart[itemId];
+            }
+            
+            updateOrderSummary();
+        }
+
+        // Оновлення підсумку замовлення
+        function updateOrderSummary() {
+            const orderList = document.getElementById('orderList');
+            const totalPrice = document.getElementById('totalPrice');
+            
+            if (Object.keys(cart).length === 0) {
+                orderList.innerHTML = 'Ваш кошик порожній';
+                totalPrice.textContent = '0';
+                return;
+            }
+            
+            let orderHTML = '';
+            let total = 0;
+            
+            for (let itemId in cart) {
+                const item = cart[itemId];
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                orderHTML += `
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                        <span>${item.name} x ${item.quantity}</span>
+                        <span>${itemTotal} грн</span>
+                    </div>
+                `;
+            }
+            
+            orderList.innerHTML = orderHTML;
+            totalPrice.textContent = total;
+        }
+
+        // Оформлення замовлення
+        function placeOrder() {
+            if (Object.keys(cart).length === 0) {
+                alert('Ваш кошик порожній! Додайте товари для замовлення.');
+                return;
+            }
+            
+            let orderDetails = 'Дякуємо за замовлення!\n\nВаше замовлення:\n\n';
+            let total = 0;
+            
+            for (let itemId in cart) {
+                const item = cart[itemId];
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                orderDetails += `${item.name} x ${item.quantity} = ${itemTotal} грн\n`;
+            }
+            
+            orderDetails += `\nЗагальна сума: ${total} грн`;
+            orderDetails += '\n\nМи зв\'яжемося з вами найближчим часом для підтвердження замовлення!';
+            
+            alert(orderDetails);
+            
+            // Очищення кошика
+            cart = {};
+            document.querySelectorAll('.quantity-input').forEach(input => input.value = '0');
+            updateOrderSummary();
+        }
+
+        // Ініціалізація сторінки
+        document.addEventListener('DOMContentLoaded', function() {
+            generateMenu();
+            generateOrderMenu();
+            updateOrderSummary();
+        });
+    </script>
+</body>
+</html>
